@@ -3,8 +3,8 @@
 
 using namespace std;
 
-#pragma region 快速排序
 
+//快速排序
 void Quick_Sort(int q[],int l,int r)
 {
     //判断边界
@@ -30,10 +30,8 @@ void Quick_Sort(int q[],int l,int r)
     
 }
 
-#pragma endregion
 
-#pragma region 归并排序
-
+//归并排序
 void Merge_Sort(int q[],int l,int r)
 {
     //判断边界
@@ -64,10 +62,8 @@ void Merge_Sort(int q[],int l,int r)
     
 }
 
-#pragma endregion
 
 #pragma region 整数二分
-
 //check函数可以随意指定，只要能够满足将左边和右边分开就好
 bool check(int x){return true;}
 
@@ -95,9 +91,11 @@ int b_Serch_2(int q[],int l,int r)
     }
     return l;
 }
+
 #pragma endregion
 
-#pragma region 浮点数二分
+
+//浮点数二分
 //求一个数的平方根
 double get_sqrt(double x)
 {
@@ -114,5 +112,3 @@ double get_sqrt(double x)
     cout<<l<<endl;
     return l;
 }
-
-#pragma endregion
