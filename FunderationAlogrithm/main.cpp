@@ -36,6 +36,7 @@ int main()
     }
  #pragma endregion   
 
+#pragma region 高精度、前缀和、差分
     cout<<get_sqrt(0.01)<<endl;
 
     system("cls");
@@ -107,6 +108,30 @@ int main()
     }
 
     cout<<endl;
+#pragma endregion 高精度、前缀和、差分
+
+#pragma region 双指针、位运算、离散化、区间合并
+
+    system("cls");
+    string s="this is the first words !";
+    PrintWords(s);
+
+    int temp_want_sub[5]={1,3,3,4,2};
+    cout<<"the max sublength of sequence is: "<<GetSubSeqLength(temp_want_sub,5)<<endl;
+
+    GetBinaryPrintf(10);
+    cout<<"the 1 count of 10 in binary is: "<<Get_Binary1_Count(10)<<endl;
+
+    vector<int>alls={10,20,30,40,50,10,20};
+    vector<PII>add={{10,1},{20,2},{30,3},{40,4},{50,5}};
+    vector<PII>query={{10,50},{20,40}};
+    Discretization(alls,add,query);
+
+    vector<PII>Interval={{1,2},{2,3},{3,4}};
+    Interval_Merge(Interval);
+    for(auto i:Interval)cout<<"the Interval has been merged to : "<<i.first<<","<<i.second<<endl;
+
+#pragma endregion 双指针、位运算、离散化、区间合并
     system("pause");
     return 0;
     

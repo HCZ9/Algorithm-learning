@@ -6,6 +6,7 @@
 using namespace std;
 
 #define Arry_Size 100
+typedef pair<int ,int> PII;
 
 //快速排序
 void Quick_Sort(int q[],int l,int r)
@@ -17,7 +18,7 @@ void Quick_Sort(int q[],int l,int r)
     }
 
     //设置分界点以及双指针，分界点可以是L,R,(L+R)/2,Random
-    int x=q[l], i=l-1,j=r+1;
+    int x=q[l+r>>1], i=l-1,j=r+1;
 
     //迭代交换
     while (i<j)
@@ -65,7 +66,7 @@ void Merge_Sort(int q[],int l,int r)
 }
 
 
-#pragma region 整数二分
+#pragma region 整数二分,二分的原始数组是有序的
 //check函数可以随意指定，只要能够满足将左边和右边分开就好
 bool check(int x){return true;}
 
@@ -275,3 +276,139 @@ void Differial_2(int q[][3],int m,int n,int x1,int y1,int x2,int y2,int c)
 }
 
 #pragma endregion 差分
+
+#pragma region 双指针
+//实现单词的分行
+void PrintWords(string &words)
+{
+    for (int i = 0; i < words.size(); i++)
+    {
+        int j=i;
+        while (words[j]!=' ' && j<words.size())
+        {
+            cout<<words[j];
+            j++;
+        }
+        cout<<endl;
+        i=j;
+    }    
+}
+
+//实现最长子序列长度
+int GetSubSeqLength(int s[],int length)
+{
+    int res=0;
+    int Count[Arry_Size];
+    memset(Count,0,Arry_Size);
+    for(int i=0 ,j =0;i<length;i++)
+    {
+        Count[s[i]]++;
+        while (Count[s[i]]>1)
+        {
+            Count[s[j]]--;
+            j++;
+        }
+        res=max(res,i-j+1);       
+    }
+    return res;
+}
+
+#pragma endregion 双指针
+
+#pragma region 位运算
+
+//实现数n的二进制表中第K位是几
+//输出数的二进制10
+void GetBinaryPrintf(int n)
+{
+    for(int k=3;k>=0;k--)
+    {
+        cout<<(n>>k & 1);
+    }
+}
+
+//返回n的租后一位1
+//查看数中有几个1
+int lowbit(int x)
+{
+    return x &-x;
+}
+int Get_Binary1_Count(int n)
+{
+    int res=0;
+    while (n--)
+    {
+        while (n)
+        {
+            n-=lowbit(n);
+            res++;
+        }
+    }
+    return res;
+}
+#pragma endregion位运算
+
+#pragma region 离散化
+int find_Index(int x,vector<int>&alls)
+{
+    int l=0,r=alls.size();
+    while (l<r)
+    {
+        int mid=l+r>>1;
+        if(alls[mid]>=x)r=mid;
+        else l=mid+1;
+    }
+    return l+1;//此处返回1是为了前缀和方便
+}
+//将需要进行离散化的数据进行排序，在进行二分查找进行操作。下面函数是alls是需要离散化的数据，因为原始坐标无限大，要映射到对应的下标之中。
+void Discretization(vector<int>&alls,vector<PII>&add,vector<PII>&query)
+{
+    int a[Arry_Size],s[Arry_Size];
+    memset(a,0,Arry_Size);
+    memset(s,0,Arry_Size);
+    //首先对需要离散化的数据进行排序去重
+    sort(alls.begin(),alls.end());
+    alls.erase(unique(alls.begin(),alls.end()),alls.end());
+    for(auto i: add)
+    {
+        int x=find_Index(i.first,alls);
+        a[x]+=i.second;
+    }
+    for(int i=1;i<=alls.size();i++)s[i]+=s[i-1]+a[i];
+    for(auto i:query)
+    {
+        int l=find_Index(i.first,alls);
+        int r=find_Index(i.second,alls);
+        cout<<"the result of query is:  "<<s[r]-s[l-1]<<endl;
+    }
+}
+#pragma endregion 离散化
+
+#pragma region 区间合并
+//区间合并要进行左端点排序再进行合并。
+void Interval_Merge(vector<PII>&segs)
+{
+    vector<PII>segtemp;
+    sort(segs.begin(),segs.end());
+    int seg_start=-2e9,seg_end=-2e9;
+    for(auto seg:segs)
+    {
+        if(seg_end<seg.first)
+        {
+            if(seg_start!=-2e9)
+            {
+                segtemp.push_back({seg_start,seg_end});
+            }
+            seg_start=seg.first;
+            seg_end=seg.second;
+        }
+        else
+        {
+            seg_end=max(seg_end,seg.second);
+        }        
+    }
+    if(seg_start!=-2e9)segtemp.push_back({seg_start,seg_end});
+    segs=segtemp;
+}
+
+#pragma region 区间合并
