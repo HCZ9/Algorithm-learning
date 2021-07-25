@@ -3,6 +3,7 @@
 #include<vector>
 #include<algorithm>
 #include<string.h>
+#include<cstdio>
 using namespace std;
 
 #define Arry_Size 100
@@ -412,3 +413,4 @@ void Interval_Merge(vector<PII>&segs)
 }
 
 #pragma region 区间合并
+
