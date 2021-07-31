@@ -8,8 +8,8 @@ int main()
     int temp_Mo_stack[5]={3,4,-2,7,5};
     Monotonic_Stack(temp_Mo_stack,5);
 
-    int temp_Mo_queue[8]={1,3 ,-1 ,-3 ,5, 3 ,6, 7};
-    Monotonic_queue(temp_Mo_queue,8,3);
+    int temp_Mo_queue[5]={5,4,3,2,1};
+    Monotonic_queue(temp_Mo_queue,5,2);
 
     //需要进行更改，使其能够适应首序为0
     system("cls");
