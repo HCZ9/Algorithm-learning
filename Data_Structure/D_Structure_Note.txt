@@ -1,3 +1,4 @@
 (1)单调栈和单调队列的思想都是先进行暴力解法，然后对暴力解法中发现某种性质，特别是单调性，然后就可以用单调栈和单调队列进行优化了。单调队列用的是双端队列。
 (2)单调栈用的栈内存储的是值，滑动窗口用的deque存储的是下标。
 (3)KMP算法的next,next[j]=k;表示的是0~k-1的前缀与j-k~j-1的后缀相同，j=next[j]，表示下次j的位置，移动的距离为j-next[j];
+(4)STL常用的容器，vector,string,queue,priority_queue,stack,deque,set,map,multiset,multimap,unordered_set,unordered_map,bitset

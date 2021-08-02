@@ -220,3 +220,18 @@ void KmpSearch(string s,string p)
 #pragma endregion KMP 0开始
 
 #pragma endregion KMP
+
+#pragma region STL容器的使用
+/*
+    vector//变长数组，倍增
+    string//可以当栈用，substr(),c_str()
+    queue//push(),front,pop()，queue没有clear清空操作为进行重新构造
+    priority_queue//堆，优先队列，push(),top(),pop()，默认是大根堆，变成小根堆可以插入负数来实现，或者priority<vector<int>,greater<int>>heap;
+    stack//栈,push(),top(),pop();
+    deque//双端队列，
+    set,map,multiset,multimap//基于平衡二叉树（红黑数），动态维护有序序列
+    unordered_set,undered_map,unordered_multiset,unordered_multimap//哈希表
+    bitset//压位，位存储、状态压缩
+*/
+
+#pragma endregion STL容器的使用
