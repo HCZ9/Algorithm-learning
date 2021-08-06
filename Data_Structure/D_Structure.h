@@ -91,7 +91,7 @@ void Move_Window(vector<int>Ivec,int WindowSize)
     }
     
 }
-#pragma region 单调栈、滑动窗口
+#pragma endregion 单调栈、滑动窗口
 
 #pragma region KMP
 //KMP算法匹配字符串，从1开始的
@@ -231,7 +231,182 @@ void KmpSearch(string s,string p)
     deque//双端队列，
     set,map,multiset,multimap//基于平衡二叉树（红黑数），动态维护有序序列
     unordered_set,undered_map,unordered_multiset,unordered_multimap//哈希表
-    bitset//压位，位存储、状态压缩
+    bitset//压位，位存储、状态压缩，每一个字节存储8位，例：比正常的数组省内存，是正常bool数组的1/8；可以省8倍空间
+        bitset<10000>s;长度为10000的bitset，和以前的容器不一样他定义的时候是个数。
+        ~s,&,|,^
+        >>,<<
+        ==,!=
+        [],
+        count()//返回有多少个1
+        any()//判断是否至少有1个1
+        none()//判断是否全为0
+        set()//把所有的位置成1
+        set(k,v)//把第k位变成v
+        reset()//把所有位变成0
+        flip()//等价于~
+        flip(k)//把第k位取反
 */
-
 #pragma endregion STL容器的使用
+
+#pragma region 并查集
+//将两个个集合合并到一个集合、询问元素是否在集合中
+int BCJ_find(int x,int p[])
+{
+    if(p[x]!=x)p[x]=BCJ_find(p[x],p);
+    return p[x];
+}
+//合并元素所在的集合
+void bcj_Merge(int a,int b,int p[],int size_BCJ[])
+{
+    p[BCJ_find(a,p)]=BCJ_find(b,p);
+    size_BCJ[BCJ_find(b,p)]+=size_BCJ[BCJ_find(b,p)];
+}
+void BCJ_Search(int a,int b,int p[])
+{
+    if(BCJ_find(a,p)==BCJ_find(b,p))
+    {
+        printf("They are in one set!\n");
+    }
+    else
+    {
+        printf("They are not in one set!\n");
+    }   
+}
+#pragma endregion 并查集
+
+#pragma region 堆(小根)
+void Heap_Swap(int a,int b,int h[])
+{
+    std::swap(h[a],h[b]);
+}
+//从下标0开始,注意此处的size是个数，构建堆从n/2开始就是n是size。最后一个叶子节点的父节点开始往下Down
+void Heap_Down(int u,int h[],int h_size)
+{
+    int t=u;
+    if(u*2+1<=h_size-1 && h[u*2+1]<h[t])t=u*2+1;
+    if(u*2+2<=h_size-1 && h[u*2+2]<h[t])t=u*2+2;
+    if(u!=t)
+    {
+        swap(h[u],h[t]);
+        Heap_Down(t,h,h_size);
+    }
+}
+void Heap_Up(int u,int h[],int h_size)
+{
+    while ((u-1)/2>=0 && h[u]<h[(u-1)/2])
+    {
+        Heap_Swap(u,(u-1)/2,h);
+        u=(u-1)>>1;
+    }    
+}
+
+//下标从1开始的堆的UP和Down
+void Heap_Down_1(int u,int h[],int h_size)
+{
+    int t=u;
+    if(u*2 <= h_size && h[u*2]<h[t])t=u*2;
+    if(u*2+1 <= h_size && h[u*2+1]<h[t])t=u*2+1;
+    if(u!=t)
+    {
+        std::swap(h[u],h[t]);
+        Heap_Down_1(t,h,h_size);
+    }
+
+}
+
+void Heap_UP_1(int u,int h[],int h_size)
+{
+    while (u/2 && h[u]<h[u/2])
+    {
+        Heap_Swap(u,u/2,h);
+        u>>=1;
+    }    
+}
+
+#pragma endregion 堆
+
+#pragma region 哈希表和哈希字符串
+//获取比x大的最小质数
+int Get_Max_Prime_Num(int x)
+{
+    for (int i = x; ; i++)
+    {
+        bool flag=true;
+        for (int j = 2; j*j <=i; j++)
+        {
+            if(i%j==0)
+            {
+                flag=false;
+                break;
+            }
+        }
+        if(flag)
+        {
+            cout<<"The Max Num:"<<i;
+            break;
+        }     
+        return i;  
+    }   
+    return -1;
+}
+//拉拉链法
+void Hash_Insert_LL(int x,int h[],int h_size,int e[],int ne[],int &idx)
+{
+    //首先获取h_size更大一些的质数
+    int Max_PrimeNum=Get_Max_Prime_Num(h_size);
+    int k=(x%Max_PrimeNum+Max_PrimeNum)%Max_PrimeNum;
+    
+    e[idx]=x;
+    ne[idx]=h[k];
+    h[k]=idx++;    
+}
+void Hash_Find_LL(int x,int h[],int h_size,int e[],int ne[])
+{
+    int Max_PrimeNum=Get_Max_Prime_Num(h_size);
+    int k=(x%Max_PrimeNum+Max_PrimeNum)%Max_PrimeNum;
+    bool flag=true;
+    for (int i = h[k]; i !=-1; i=ne[i])
+    {   
+        if(e[i]==x)
+        {
+            printf("is in hash!");
+            flag=false;
+            break;
+        }
+    }
+    if(flag)printf("not in hash !");
+}
+
+//开放寻址法
+int Hash_find_Open_add(int x,int h[],int h_size)
+{
+    int Max_PrimeNum=Get_Max_Prime_Num(h_size);
+    int k=(x % Max_PrimeNum + Max_PrimeNum) % Max_PrimeNum;
+    while (h[k]!=0 && h[k]!=x)
+    {
+        k++;
+        if(k=h_size-1)k=0;
+    }
+    return k;
+}
+
+//哈希字符串
+//P取131,p[]存储的是p^k，h[]存储的是前缀和，从左往右k递增
+void Set_Hash_str(string s,int h[],int p[])
+{
+    p[0]=1;
+    h[0]=s[0];
+    for (size_t i = 1; i <=s.size(); i++)
+    {
+        p[i]=p[i-1]*131;
+        h[i]=h[i-1]*131+s[i];
+    }   
+}
+
+unsigned long long get_hash_str(int l,int r,int h[],int p[])
+{
+    if(l==0)return h[r];
+    return h[r]-h[l-1]*p[r-l+1];//乘以p[r-l+1]是乘以之间的差距次方，来进行前面的消除
+}
+
+#pragma endregion 哈希表和哈希字符串
